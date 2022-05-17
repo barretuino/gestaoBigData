@@ -1,0 +1,27 @@
+<%@ page contentType="text/html" language="java" import="java.sql.*"%>  
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">  
+  
+<head>  
+   <title>Teste de Conexão</title>  
+</head>  
+  
+<body>  
+  
+<%  
+      Connection con;  
+   Statement stm;  
+     
+   try {  
+  
+      Class.forName("com.mysql.jdbc.Driver");  
+      con = DriverManager.getConnection("jdbc:mysql://localhost:3306/teste","root","root");  
+      stm = con.createStatement();   
+      out.println("Conexão efetuada com sucesso");  
+           
+   } catch (Exception e) {  
+      out.println("Não foi possível conectar ao banco" + e.getMessage());  
+   }  
+%>  
+  
+</body>  
+

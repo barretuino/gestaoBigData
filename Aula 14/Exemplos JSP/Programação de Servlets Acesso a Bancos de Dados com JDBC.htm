@@ -1,0 +1,599 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0108)http://www.ucb.br/prg/professores/giovanni/disciplinas/2004-1/talp/material/jacques/html/jsp/techsupport.htm -->
+<HTML><HEAD><TITLE>Programação de Servlets: Acesso a Bancos de Dados com JDBC</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2900.3395" name=GENERATOR><LINK 
+href="Programação de Servlets Acesso a Bancos de Dados com JDBC_arquivos/cursos.css" 
+type=text/css rel=stylesheet><LINK 
+href="Programação de Servlets Acesso a Bancos de Dados com JDBC_arquivos/typical.css" 
+type=text/css rel=stylesheet></HEAD>
+<BODY>
+<H1 align=center>Programação WEB usando Servlets e JSP</H1>
+<H2>O Problema: Aplicação de Suporte Técnico</H2>
+<UL>
+  <LI>Vamos agora implementar a aplicação de <FONT color=#0080ff>Suporte Técnico 
+  </FONT>vista anteriormente usando Servlets em conjunto com páginas JSP. 
+</LI></UL>
+<H2>A Solução</H2>
+<UL>
+  <LI>Vamos seguir os seis passos definidos anteriormente para a construção de 
+  aplicações WEB: 
+  <BLOCKQUOTE>1. Implementar o código dos componentes da aplicação;<BR>2. 
+    Compilar o código dos componentes da aplicação e de outras classes e 
+    bibliotecas;<BR>3. Desenvolver o <I>deployment descriptor</I> da 
+    aplicação;<BR>4. Empacotar a aplicação em um módulo instalável 
+    (<I>deployable</I>);<BR>5. Efetuar a instalação (<I>deployment</I>) da 
+    aplicação no Container WEB;<BR>6. Acessar a URL que referencia a aplicação 
+    WEB.<BR></BLOCKQUOTE></LI></UL>
+<H3>1. Implementar o código dos componentes da aplicação</H3>
+<UL>
+  <LI>Tomaremos como base todo o código-fonte já implementado anteriormente. 
+  Entretanto, algumas pequenas modificações serão necessárias: </LI></UL>
+<H4>index.html</H4>
+<UL>
+  <LI>Esta é a "Welcome page" da aplicação: a primeira página exibida 
+  <LI>Seu conteúdo segue
+  <UL>
+    <LI>Observe os alias que usaremos para os servlets (/cadastra, /lista) 
+    <LI>Observe também que mudamos o contexto para <B>techsupjsp</B> 
+  </LI></UL></LI></UL>
+<DIV class=webcpp><PRE><FONT class=preproc>&lt;<FONT class=keytype>html</FONT>&gt;</FONT>
+
+<FONT class=preproc>&lt;<FONT class=keytype>head</FONT>&gt;</FONT>
+<FONT class=preproc>&lt;<FONT class=keytype>title</FONT>&gt;</FONT>UFPb - Help Desk<FONT class=preproc>&lt;/<FONT class=keytype>title</FONT>&gt;</FONT>
+<FONT class=preproc>&lt;/<FONT class=keytype>head</FONT>&gt;</FONT>
+
+<FONT class=preproc>&lt;<FONT class=keytype>body</FONT>&gt;</FONT>
+
+<FONT class=preproc>&lt;<FONT class=keytype>h1</FONT>&gt;</FONT>Pedido de Suporte Técnico - Help Desk da UFPb<FONT class=preproc>&lt;/<FONT class=keytype>h1</FONT>&gt;</FONT>
+
+<FONT class=preproc>&lt;<FONT class=keytype>hr</FONT>&gt;</FONT>
+
+<FONT class=preproc>&lt;p <FONT class=keytype>align</FONT>=<FONT class=dblquot>"center"</FONT>&gt;</FONT><FONT class=preproc>&lt;<FONT class=keytype>br</FONT>&gt;</FONT>
+<FONT class=preproc>&lt;/p&gt;</FONT>
+
+<FONT class=preproc>&lt;<FONT class=keytype>form</FONT> <FONT class=keytype>ACTION</FONT>=<FONT class=dblquot>"/techsupjsp/cadastra"</FONT> <FONT class=keytype>METHOD</FONT>=<FONT class=dblquot>"POST"</FONT>&gt;</FONT>
+
+  <FONT class=preproc>&lt;<FONT class=keytype>table</FONT> <FONT class=keytype>ALIGN</FONT>=<FONT class=dblquot>"center"</FONT> WIDTH=<FONT class=dblquot>"100%"</FONT> <FONT class=keytype>CELLSPACING</FONT>=<FONT class=dblquot>"2"</FONT> <FONT class=keytype>CELLPADDING</FONT>=<FONT class=dblquot>"2"</FONT>&gt;</FONT>
+
+    <FONT class=preproc>&lt;<FONT class=keytype>tr</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;<FONT class=keytype>td</FONT> <FONT class=keytype>ALIGN</FONT>=<FONT class=dblquot>"right"</FONT>&gt;</FONT>Nome:<FONT class=preproc>&lt;/<FONT class=keytype>td</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;<FONT class=keytype>td</FONT>&gt;</FONT><FONT class=preproc>&lt;<FONT class=keytype>input</FONT> TYPE="Text" <FONT class=keytype>NAME</FONT>="nome" <FONT class=keytype>ALIGN</FONT>="LEFT" <FONT class=keytype>SIZE</FONT>="15"&gt;</FONT><FONT class=preproc>&lt;/<FONT class=keytype>td</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;<FONT class=keytype>td</FONT> <FONT class=keytype>ALIGN</FONT>=<FONT class=dblquot>"right"</FONT>&gt;</FONT>Sobrenome:<FONT class=preproc>&lt;/<FONT class=keytype>td</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;<FONT class=keytype>td</FONT>&gt;</FONT><FONT class=preproc>&lt;<FONT class=keytype>input</FONT> TYPE="Text" <FONT class=keytype>NAME</FONT>="sobrenome" <FONT class=keytype>ALIGN</FONT>="LEFT" <FONT class=keytype>SIZE</FONT>="15"&gt;</FONT><FONT class=preproc>&lt;/<FONT class=keytype>td</FONT>&gt;</FONT>
+    <FONT class=preproc>&lt;/<FONT class=keytype>tr</FONT>&gt;</FONT>
+
+    <FONT class=preproc>&lt;<FONT class=keytype>tr</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;<FONT class=keytype>td</FONT> <FONT class=keytype>ALIGN</FONT>=<FONT class=dblquot>"right"</FONT>&gt;</FONT>Email:<FONT class=preproc>&lt;/<FONT class=keytype>td</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;<FONT class=keytype>td</FONT>&gt;</FONT><FONT class=preproc>&lt;<FONT class=keytype>input</FONT> TYPE="Text" <FONT class=keytype>NAME</FONT>="email" <FONT class=keytype>ALIGN</FONT>="LEFT" <FONT class=keytype>SIZE</FONT>="25"&gt;</FONT><FONT class=preproc>&lt;/<FONT class=keytype>td</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;<FONT class=keytype>td</FONT> <FONT class=keytype>ALIGN</FONT>=<FONT class=dblquot>"right"</FONT>&gt;</FONT>Fone:<FONT class=preproc>&lt;/<FONT class=keytype>td</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;<FONT class=keytype>td</FONT>&gt;</FONT><FONT class=preproc>&lt;<FONT class=keytype>input</FONT> TYPE="Text" <FONT class=keytype>NAME</FONT>="fone" <FONT class=keytype>ALIGN</FONT>="LEFT" <FONT class=keytype>SIZE</FONT>="15"&gt;</FONT><FONT class=preproc>&lt;/<FONT class=keytype>td</FONT>&gt;</FONT>
+    <FONT class=preproc>&lt;/<FONT class=keytype>tr</FONT>&gt;</FONT>
+
+    <FONT class=preproc>&lt;<FONT class=keytype>tr</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;<FONT class=keytype>td</FONT> <FONT class=keytype>ALIGN</FONT>=<FONT class=dblquot>"right"</FONT>&gt;</FONT>Software:<FONT class=preproc>&lt;/<FONT class=keytype>td</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;<FONT class=keytype>td</FONT>&gt;</FONT><FONT class=preproc>&lt;<FONT class=keytype>select</FONT> <FONT class=keytype>NAME</FONT>=<FONT class=dblquot>"software"</FONT> <FONT class=keytype>SIZE</FONT>=<FONT class=dblquot>"1"</FONT>&gt;</FONT>
+        <FONT class=preproc>&lt;<FONT class=keytype>option</FONT> <FONT class=keytype>VALUE</FONT>=<FONT class=dblquot>"Word"</FONT>&gt;</FONT>Microsoft Word<FONT class=preproc>&lt;/<FONT class=keytype>option</FONT>&gt;</FONT>
+        <FONT class=preproc>&lt;<FONT class=keytype>option</FONT> <FONT class=keytype>VALUE</FONT>=<FONT class=dblquot>"Excel"</FONT>&gt;</FONT>Microsoft Excel<FONT class=preproc>&lt;/<FONT class=keytype>option</FONT>&gt;</FONT>
+        <FONT class=preproc>&lt;<FONT class=keytype>option</FONT> <FONT class=keytype>VALUE</FONT>=<FONT class=dblquot>"Access"</FONT>&gt;</FONT>Microsoft Access<FONT class=preproc>&lt;/<FONT class=keytype>option</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;/<FONT class=keytype>select</FONT>&gt;</FONT> <FONT class=preproc>&lt;/<FONT class=keytype>td</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;<FONT class=keytype>td</FONT> <FONT class=keytype>ALIGN</FONT>=<FONT class=dblquot>"right"</FONT>&gt;</FONT>Sistema Operacional:<FONT class=preproc>&lt;/<FONT class=keytype>td</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;<FONT class=keytype>td</FONT>&gt;</FONT><FONT class=preproc>&lt;<FONT class=keytype>select</FONT> <FONT class=keytype>NAME</FONT>=<FONT class=dblquot>"so"</FONT> <FONT class=keytype>size</FONT>=<FONT class=dblquot>"1"</FONT>&gt;</FONT>
+        <FONT class=preproc>&lt;<FONT class=keytype>option</FONT> <FONT class=keytype>VALUE</FONT>=<FONT class=dblquot>"95"</FONT>&gt;</FONT>Windows 95<FONT class=preproc>&lt;/<FONT class=keytype>option</FONT>&gt;</FONT>
+        <FONT class=preproc>&lt;<FONT class=keytype>option</FONT> <FONT class=keytype>VALUE</FONT>=<FONT class=dblquot>"98"</FONT>&gt;</FONT>Windows 98<FONT class=preproc>&lt;/<FONT class=keytype>option</FONT>&gt;</FONT>
+        <FONT class=preproc>&lt;<FONT class=keytype>option</FONT> <FONT class=keytype>VALUE</FONT>=<FONT class=dblquot>"NT"</FONT>&gt;</FONT>Windows NT<FONT class=preproc>&lt;/<FONT class=keytype>option</FONT>&gt;</FONT>
+        <FONT class=preproc>&lt;<FONT class=keytype>option</FONT> <FONT class=keytype>VALUE</FONT>=<FONT class=dblquot>"2000"</FONT>&gt;</FONT>Windows 2000<FONT class=preproc>&lt;/<FONT class=keytype>option</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;/<FONT class=keytype>select</FONT>&gt;</FONT> <FONT class=preproc>&lt;/<FONT class=keytype>td</FONT>&gt;</FONT>
+    <FONT class=preproc>&lt;/<FONT class=keytype>tr</FONT>&gt;</FONT>
+  <FONT class=preproc>&lt;/<FONT class=keytype>table</FONT>&gt;</FONT>
+  <FONT class=preproc>&lt;p&gt;</FONT><FONT class=preproc>&lt;<FONT class=keytype>br</FONT>&gt;</FONT>
+  Descrição do Problema<FONT class=preproc>&lt;<FONT class=keytype>br</FONT>&gt;</FONT>
+  <FONT class=preproc>&lt;<FONT class=keytype>textarea</FONT> <FONT class=keytype>NAME</FONT>=<FONT class=dblquot>"problema"</FONT> <FONT class=keytype>COLS</FONT>=<FONT class=dblquot>"50"</FONT> <FONT class=keytype>ROWS</FONT>=<FONT class=dblquot>"4"</FONT>&gt;</FONT><FONT class=preproc>&lt;/<FONT class=keytype>textarea</FONT>&gt;</FONT> <FONT class=preproc>&lt;/p&gt;</FONT>
+
+  <FONT class=preproc>&lt;<FONT class=keytype>hr</FONT>&gt;</FONT>
+  
+  <FONT class=preproc>&lt;p&gt;</FONT><FONT class=preproc>&lt;<FONT class=keytype>br</FONT>&gt;</FONT>
+  <FONT class=preproc>&lt;<FONT class=keytype>input</FONT> TYPE=<FONT class=dblquot>"submit"</FONT> <FONT class=keytype>NAME</FONT>=<FONT class=dblquot>"submit"</FONT> <FONT class=keytype>VALUE</FONT>=<FONT class=dblquot>"Submeter Pedido"</FONT>&gt;</FONT> <FONT class=preproc>&lt;/p&gt;</FONT>
+
+<FONT class=preproc>&lt;/<FONT class=keytype>form</FONT>&gt;</FONT>
+
+<FONT class=preproc>&lt;p&gt;</FONT><FONT class=preproc>&lt;a <FONT class=keytype>href</FONT>=<FONT class=dblquot>"/techsupjsp/lista"</FONT>&gt;</FONT>Listar pedidos de suporte existentes<FONT class=preproc>&lt;/a&gt;</FONT><FONT class=preproc>&lt;/p&gt;</FONT>
+<FONT class=preproc>&lt;/<FONT class=keytype>body</FONT>&gt;</FONT>
+<FONT class=preproc>&lt;/<FONT class=keytype>html</FONT>&gt;</FONT>
+</PRE></DIV>
+<H4>TechSupServlet</H4>
+<UL>
+  <LI>Este é o servlet de cadastro 
+  <LI>O código é praticamente o mesmo. Entretanto, retiramos a geração do código 
+  HTML que havia anteriormente e chamamos o método <CODE>sendRedirect</CODE> 
+  para redirecionar a aplicação para uma página JSP, nesse caso, 
+  confirmação.jsp. 
+  <LI>Além disso, estamos usando a sessão HTTP para passar o valor do 
+  identificador do pedido para a página JSP. </LI></UL>
+<DIV class=webcpp><PRE><FONT class=comment>// Import Servlet packages</FONT>
+<FONT class=keyword>import</FONT> javax.servlet.*;
+<FONT class=keyword>import</FONT> javax.servlet.http.*;
+
+<FONT class=comment>// Import other Java packages</FONT>
+<FONT class=keyword>import</FONT> java.io.*;
+<FONT class=keyword>import</FONT> java.sql.*;
+
+<FONT class=comment>/**
+ * Este servlet é usado para se cadastrar a ocorrência de um problema em
+ * um banco de dados.
+ */</FONT>
+<FONT class=keyword>public</FONT> <FONT class=keyword>class</FONT> TechSupServlet <FONT class=keyword>extends</FONT> HttpServlet {
+
+  <FONT class=comment>/**
+   * Objeto para acesso ao banco de dados.
+   */</FONT>
+  <FONT class=keyword>private</FONT> TechSupDB techSupDB;
+
+  <FONT class=comment>/**
+   * Esse método é executado quando o servlet é carregado.
+   */</FONT>
+  <FONT class=keyword>public</FONT> <FONT class=keytype>void</FONT> init() <FONT class=keyword>throws</FONT> ServletException {
+    techSupDB <FONT class=symbols>=</FONT> (TechSupDB)getServletContext().getAttribute(<FONT class=dblquot>"techSupDB"</FONT>);
+    <FONT class=keyword>if</FONT>(techSupDB <FONT class=symbols>==</FONT> <FONT class=keyword>null</FONT>) {
+      <FONT class=keyword>throw</FONT> <FONT class=keyword>new</FONT> UnavailableException(<FONT class=dblquot>"Nao pode obter o banco de dados."</FONT>);
+    }
+  }
+
+  <FONT class=comment>/**
+   * Esse método é chamado quando o servlet é destruído.
+   */</FONT>
+  <FONT class=keyword>public</FONT> <FONT class=keytype>void</FONT> destroy() {
+    techSupDB.remove();
+    techSupDB <FONT class=symbols>=</FONT> <FONT class=keyword>null</FONT>;
+  }
+
+  <FONT class=comment>/*
+   * Esse método trata as requisições vindas de formulários HTML
+   * usando o método POST.
+   *
+   * Ele recebe os dados da ocorrência informados na página 
+   * HTML, grava-os no banco de dados e envia uma página de confirmação
+   * para o usuário.
+   */</FONT>
+  <FONT class=keyword>protected</FONT> <FONT class=keytype>void</FONT> doPost(HttpServletRequest req, HttpServletResponse res) 
+          <FONT class=keyword>throws</FONT> ServletException, IOException {
+    String nome <FONT class=symbols>=</FONT> req.getParameter(<FONT class=dblquot>"nome"</FONT>);
+    String sobrenome <FONT class=symbols>=</FONT> req.getParameter(<FONT class=dblquot>"sobrenome"</FONT>);
+    String email <FONT class=symbols>=</FONT> req.getParameter(<FONT class=dblquot>"email"</FONT>);
+    String fone <FONT class=symbols>=</FONT> req.getParameter(<FONT class=dblquot>"fone"</FONT>);
+    String software <FONT class=symbols>=</FONT> req.getParameter(<FONT class=dblquot>"software"</FONT>);
+    String so <FONT class=symbols>=</FONT> req.getParameter(<FONT class=dblquot>"so"</FONT>);
+    String problema <FONT class=symbols>=</FONT> req.getParameter(<FONT class=dblquot>"problema"</FONT>);
+    // deveria verificar os parametros para ter certeza que não são nulos
+    <FONT class=keytype>int</FONT> requestId <FONT class=symbols>=</FONT> <FONT class=integer>0</FONT>;
+    <FONT class=keyword>try</FONT> {
+      requestId <FONT class=symbols>=</FONT> techSupDB.addRequest(nome, sobrenome, email, fone,
+                             software, so, problema);
+    } <FONT class=keyword>catch</FONT> (RequestNotInsertedException e) {
+      <FONT class=keyword>throw</FONT> <FONT class=keyword>new</FONT> ServletException(<FONT class=dblquot>"Erro no banco de dados: "</FONT>, e);
+    } 
+
+    req.getSession().setAttribute(<FONT class=dblquot>"requestId"</FONT>, <FONT class=keyword>new</FONT> Integer(requestId));
+    <FONT class=comment>// Redireciona para a página JSP informada</FONT>
+    res.sendRedirect(<FONT class=dblquot>"confirmacao.jsp"</FONT>);
+
+  } 
+}
+</PRE></DIV>
+<H4>TechSupListaServlet</H4>
+<UL>
+  <LI>Este servlet obtém a coleção de pedidos e e a exibe em HTML 
+  <LI>O código é praticamente o mesmo, com a diferença que estamos usando a 
+  sessão HTTP para passar a lista de pedidos cadastrada para a página JSP e 
+  chamamos o método <CODE>sendRedirect</CODE> para redirecionar a aplicação para 
+  a página lista.jsp. </LI></UL><PRE class=clsCode>// Import Servlet packages
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+// Import other Java packages
+import java.io.*;
+import java.util.*;
+import java.sql.*;
+
+public class TechSupListaServlet extends HttpServlet {
+  private TechSupDB techSupDB;
+
+  public void init() throws ServletException {
+    techSupDB =
+            (TechSupDB)getServletContext().getAttribute("techSupDB");
+    if(techSupDB == null) {
+      throw new UnavailableException("Nao pode obter o banco de dados.");
+    }
+  }
+
+  public void destroy() {
+    techSupDB.remove();
+    techSupDB = null;
+  }
+
+  protected void doGet(HttpServletRequest req, HttpServletResponse res) 
+          throws ServletException, IOException {
+
+	Collection requests = new ArrayList();
+    try {
+      requests = techSupDB.getTechSupRequests();
+    } catch(RequestsNotFoundException e ) {
+      throw new ServletException("Erro no banco de dados: ", e);
+    }
+	
+<FONT color=#0080ff>	req.getSession().setAttribute("pedidos", requests);</FONT>
+	// Redireciona para a página JSP informada
+<FONT color=#0080ff>	res.sendRedirect("lista.jsp");</FONT>
+  } 
+}</PRE>
+<H4>TechSupDetalhaServlet</H4>
+<UL>
+  <LI>Este servlet dá detalhes de um pedido específico. 
+  <LI>É muito simples, como os outros servlets, já que camada de acesso aos 
+  dados está isolada em TechSupDB 
+  <LI>O código é praticamente o mesmo, com a diferença que estamos usando a 
+  sessão HTTP para passar os detalhes do pedido para a página JSP e chamamos o 
+  método <CODE>sendRedirect</CODE> para redirecionar a aplicação para a página 
+  detalha.jsp. </LI></UL><PRE class=clsCode>// Import Servlet packages
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+// Import other Java packages
+import java.io.*;
+import java.util.*;
+import java.sql.*;
+
+public class TechSupDetalhaServlet extends HttpServlet {
+  private TechSupDB techSupDB;
+
+  public void init() throws ServletException {
+    techSupDB =
+            (TechSupDB)getServletContext().getAttribute("techSupDB");
+    if(techSupDB == null) {
+      throw new UnavailableException("Nao pode obter o banco de dados.");
+    }
+  }
+
+  public void destroy() {
+    techSupDB.remove();
+    techSupDB = null;
+  }
+
+  protected void doGet(HttpServletRequest req, HttpServletResponse res) 
+          throws ServletException, IOException {
+
+    int requestId = Integer.parseInt(req.getParameter("requestId"));
+    RequestDetails rd = null;
+    try {
+      rd = techSupDB.getRequestDetails(requestId);
+    } catch(RequestNotFoundException e) {
+      throw new ServletException("Erro no banco de dados: ", e);
+    }
+
+<FONT color=#0080ff>	req.getSession().setAttribute("pedido", rd);</FONT>
+	// Redireciona para a página JSP informada
+<FONT color=#0080ff>	res.sendRedirect("detalha.jsp");</FONT>
+  } 
+}</PRE>
+<H4>Páginas JSP</H4>
+<UL>
+  <LI>Todo o código HTML que estava anteriormente embutido nos servlets foram 
+  transferidos para as páginas JSP correpondentes: confirmação.jsp, lista.jsp e 
+  detalha.jsp. </LI></UL>
+<H5>confirmação.jsp</H5>
+<UL>
+  <LI>Esta é a página JSP chamada para mostrar a confirmação do cadastro do 
+  pedido de suporte 
+  <LI>Observe o trecho em destaque </LI></UL><PRE class=clsCode>&lt;HTML&gt;&lt;HEAD&gt;&lt;TITLE&gt;
+Suporte Técnico: Confirmação de Pedido
+&lt;/TITLE&gt;&lt;/HEAD&gt;
+&lt;BODY&gt;
+&lt;H1&gt;Suporte Técnico: Confirmação de Pedido&lt;/H1&gt;
+&lt;P&gt;Obrigado por seu pedido. Recebemos seu pedido e ele recebeu o número de identificação seguinte.&lt;/P&gt;
+&lt;P&gt;Identificação do Pedido: " <FONT color=#0080ff>
+&lt;%= ((Integer) session.getAttribute("requestId")).intValue() %&gt;</FONT> "&lt;/P&gt;
+&lt;P&gt;Favor anotar este número para referência futura.&lt;/P&gt;
+&lt;P&gt;Atenderemos seu pedido nos próximos 24 horas.&lt;/P&gt;
+&lt;P&gt;O administrador&lt;br&gt;Equipe de Suporte Técnico. &lt;/P&gt;
+&lt;/BODY&gt;&lt;/HTML&gt;
+</PRE>
+<H5>lista.jsp</H5>
+<UL>
+  <LI>Esta é a página JSP chamada para mostrar a lista de pedidos de suporte 
+  cadastrados 
+  <LI>Observe o trecho em destaque </LI></UL><PRE class=clsCode><FONT color=#0080ff>&lt;%@ page import="java.util.*" %&gt;
+&lt;%@ page import="RequestDetails" %&gt;</FONT>
+
+&lt;html&gt;
+&lt;body&gt;
+
+<FONT color=#0080ff>&lt;%
+	Collection pedidos = (Collection) session.getAttribute("pedidos");
+	Iterator i = pedidos.iterator();
+%&gt;</FONT>
+
+&lt;H1&gt;Suporte Técnico: Lista de Pedidos&lt;/H1&gt;
+
+&lt;TABLE CLASS="clsIndex"&gt;
+	&lt;TR&gt;
+		&lt;TD CLASS="clsBigNav"&gt;
+			Identificação de pedido
+		&lt;/TD&gt;
+		&lt;TD CLASS="clsBigNav"&gt;
+			Sobrenome
+		&lt;/TD&gt;
+		&lt;TD CLASS="clsBigNav"&gt;
+			Software
+		&lt;/TD&gt;
+	&lt;/TR&gt;
+
+	
+<FONT color=#0080ff>&lt;%
+	while (i.hasNext()) {
+		RequestDetails pedido = (RequestDetails) i.next();
+%&gt;</FONT>
+	&lt;TR&gt;
+		&lt;TD CLASS="clsTitle"&gt;
+			&lt;a href="/techsupjsp/detalha?requestId="&gt;<FONT color=#0080ff>&lt;%= pedido.getRequestId()%&gt;</FONT>&lt;/a&gt;
+		&lt;/TD&gt;
+		&lt;TD CLASS="clsTitle"&gt;
+			<FONT color=#0080ff>&lt;%= pedido.getSobrenome()%&gt;</FONT>
+		&lt;/TD&gt;
+		&lt;TD CLASS="clsTitle"&gt;
+			<FONT color=#0080ff>&lt;%= pedido.getSoftware()%&gt;</FONT>
+		&lt;/TD&gt;
+	&lt;/TR&gt;
+&lt;%
+	}
+
+%&gt;
+
+&lt;/TABLE&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</PRE>
+<H5>detalha.jsp</H5>
+<UL>
+  <LI>Esta é a página JSP chamada para mostrar os dados de um pedido de suporte 
+  selecionado 
+  <LI>Observe o trecho em destaque </LI></UL><PRE class=clsCode><FONT color=#0080ff>&lt;%@ page import="RequestDetails" %&gt;</FONT>
+
+&lt;HTML&gt;
+&lt;HEAD&gt;
+&lt;LINK REL="stylesheet" TYPE="text/css" HREF="cursos.css"/&gt;
+&lt;TITLE&gt;
+Suporte Técnico: Detalhe de Pedido
+&lt;/TITLE&gt;
+&lt;/HEAD&gt;
+
+&lt;BODY&gt;
+
+&lt;H1&gt;Suporte Técnico: Detalhe de Pedido&lt;/H1&gt;
+
+<FONT color=#0080ff>&lt;%
+	RequestDetails pedido = (RequestDetails) session.getAttribute("pedido");
+%&gt;</FONT>
+
+&lt;H2&gt;Identificação de Pedido: <FONT color=#0080ff>&lt;%= pedido.getRequestId() %&gt;</FONT> &lt;/H2&gt;
+&lt;UL&gt;
+&lt;LI&gt;Nome: <FONT color=#0080ff>&lt;%= pedido.getNome() %&gt;</FONT> &lt;/LI&gt;
+&lt;LI&gt;Sobrenome: <FONT color=#0080ff>&lt;%= pedido.getSobrenome() %&gt;</FONT> &lt;/LI&gt;
+&lt;LI&gt;Email: <FONT color=#0080ff>&lt;%= pedido.getEmail() %&gt;</FONT> &lt;/LI&gt;
+&lt;LI&gt;Fone: <FONT color=#0080ff>&lt;%= pedido.getFone() %&gt;</FONT> &lt;/LI&gt;
+&lt;LI&gt;Software: <FONT color=#0080ff>&lt;%= pedido.getSoftware() %&gt;</FONT> &lt;/LI&gt;
+&lt;LI&gt;SO: <FONT color=#0080ff>&lt;%= pedido.getSo() %&gt;</FONT> &lt;/LI&gt;
+&lt;LI&gt;Problema: <FONT color=#0080ff>&lt;%= pedido.getProblema() %&gt;</FONT> &lt;/LI&gt;
+&lt;/UL&gt;
+
+&lt;/BODY&gt;
+&lt;/HTML&gt;
+</PRE>
+<H3>2. Compilar o código dos componentes da aplicação e de outras classes e 
+bibliotecas</H3>
+<UL>
+  <LI>Imagine que esteja usando a máquina do desenvolvedor da aplicação
+  <UL>
+    <LI>Lembre que não estamos no servidor J2EE 
+    <LI>Tampouco estamos usando uma máquina dos clientes que eventualmente 
+    comprarão a aplicação 
+    <LI><FONT color=#0080ff>Esta é a máquina onde o programador compõe a 
+    aplicação</FONT> </LI></UL>
+  <LI>Antes de compilarmos essa aplicação, verifique se o nome do projeto 
+  definido no arquivo <CODE>build.xml</CODE> está configurado corretamente para 
+  <B>techsupjsp</B>: </LI></UL><PRE class=clsCode>&lt;project name="techsupjsp" default="all" basedir="."&gt;
+</PRE>
+<UL>
+  <LI>Agora, vamos compilar a aplicação: </LI></UL><PRE class=clsCode>C:\...\techsupjsp&gt;ant compila
+Buildfile: build.xml
+
+cria-build-dir:
+     [echo] Criando a estrutura do diretório build...
+    [mkdir] Created dir: C:\...\techsupjsp\build\WEB-INF\classes
+compila:
+     [echo] Copiando os arquivos da pasta web para a pasta build...
+     [copy] Copying 4 files to C:\...\techsupjsp\build
+     [echo] Copiando o arquivo xml/jboss-web.xml para a pasta build/WEB-INF...
+     [copy] Copying 1 file to C:\...\techsupjsp\build\WEB-INF
+     [echo] Compilando o código-fonte da aplicação para build/WEB-INF/classes...
+    [javac] Compiling 10 source files to C:\...\techsupjsp\build\WEB-INF\classes
+
+BUILD SUCCESSFUL
+Total time: 13 seconds
+</PRE>
+<H3>3. Desenvolver o <I>deployment descriptor</I> da aplicação</H3>
+<P>Abaixo segue o arquivo <CODE>web.xml</CODE> para esta aplicação. 
+<DIV class=webcpp><PRE><FONT class=preproc>&lt;web-app &gt;</FONT>
+
+   <FONT class=preproc>&lt;listener&gt;</FONT>
+      <FONT class=preproc>&lt;listener-class&gt;</FONT>ContextListener<FONT class=preproc>&lt;/listener-class&gt;</FONT>
+   <FONT class=preproc>&lt;/listener&gt;</FONT>
+
+   <FONT class=preproc>&lt;servlet&gt;</FONT>
+      <FONT class=preproc>&lt;servlet-<FONT class=keytype>name</FONT>&gt;</FONT>TechSupListaServlet<FONT class=preproc>&lt;/servlet-<FONT class=keytype>name</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;display-<FONT class=keytype>name</FONT>&gt;</FONT>TechSupListaServlet<FONT class=preproc>&lt;/display-<FONT class=keytype>name</FONT>&gt;</FONT>
+     <FONT class=preproc>&lt;servlet-class&gt;</FONT>TechSupListaServlet<FONT class=preproc>&lt;/servlet-class&gt;</FONT>
+   <FONT class=preproc>&lt;/servlet&gt;</FONT>
+
+   <FONT class=preproc>&lt;servlet&gt;</FONT>
+      <FONT class=preproc>&lt;servlet-<FONT class=keytype>name</FONT>&gt;</FONT>TechSupServlet<FONT class=preproc>&lt;/servlet-<FONT class=keytype>name</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;display-<FONT class=keytype>name</FONT>&gt;</FONT>TechSupServlet<FONT class=preproc>&lt;/display-<FONT class=keytype>name</FONT>&gt;</FONT>
+     <FONT class=preproc>&lt;servlet-class&gt;</FONT>TechSupServlet<FONT class=preproc>&lt;/servlet-class&gt;</FONT>
+   <FONT class=preproc>&lt;/servlet&gt;</FONT>
+
+   <FONT class=preproc>&lt;servlet&gt;</FONT>
+      <FONT class=preproc>&lt;servlet-<FONT class=keytype>name</FONT>&gt;</FONT>TechSupDetalhaServlet<FONT class=preproc>&lt;/servlet-<FONT class=keytype>name</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;display-<FONT class=keytype>name</FONT>&gt;</FONT>TechSupDetalhaServlet<FONT class=preproc>&lt;/display-<FONT class=keytype>name</FONT>&gt;</FONT>
+     <FONT class=preproc>&lt;servlet-class&gt;</FONT>TechSupDetalhaServlet<FONT class=preproc>&lt;/servlet-class&gt;</FONT>
+   <FONT class=preproc>&lt;/servlet&gt;</FONT>
+
+   <FONT class=preproc>&lt;servlet-mapping&gt;</FONT>
+      <FONT class=preproc>&lt;servlet-<FONT class=keytype>name</FONT>&gt;</FONT>TechSupListaServlet<FONT class=preproc>&lt;/servlet-<FONT class=keytype>name</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;url-pattern&gt;</FONT>/lista<FONT class=preproc>&lt;/url-pattern&gt;</FONT>
+   <FONT class=preproc>&lt;/servlet-mapping&gt;</FONT>
+
+   <FONT class=preproc>&lt;servlet-mapping&gt;</FONT>
+      <FONT class=preproc>&lt;servlet-<FONT class=keytype>name</FONT>&gt;</FONT>TechSupServlet<FONT class=preproc>&lt;/servlet-<FONT class=keytype>name</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;url-pattern&gt;</FONT>/cadastra<FONT class=preproc>&lt;/url-pattern&gt;</FONT>
+   <FONT class=preproc>&lt;/servlet-mapping&gt;</FONT>
+
+   <FONT class=preproc>&lt;servlet-mapping&gt;</FONT>
+      <FONT class=preproc>&lt;servlet-<FONT class=keytype>name</FONT>&gt;</FONT>TechSupDetalhaServlet<FONT class=preproc>&lt;/servlet-<FONT class=keytype>name</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;url-pattern&gt;</FONT>/detalha<FONT class=preproc>&lt;/url-pattern&gt;</FONT>
+   <FONT class=preproc>&lt;/servlet-mapping&gt;</FONT>
+
+   <FONT class=preproc>&lt;resource-ref &gt;</FONT>
+      <FONT class=preproc>&lt;res-ref-<FONT class=keytype>name</FONT>&gt;</FONT>jdbc/TechSupDB<FONT class=preproc>&lt;/res-ref-<FONT class=keytype>name</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;res-<FONT class=keytype>type</FONT>&gt;</FONT>javax.sql.DataSource<FONT class=preproc>&lt;/res-<FONT class=keytype>type</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;res-auth&gt;</FONT>Container<FONT class=preproc>&lt;/res-auth&gt;</FONT>
+   <FONT class=preproc>&lt;/resource-ref&gt;</FONT>
+
+<FONT class=preproc>&lt;/web-app&gt;</FONT>
+</PRE></DIV>
+<P>Também é preciso gerar um arquivo chamado <CODE>jboss-web.xml</CODE>: 
+<DIV class=webcpp><PRE><FONT class=preproc>&lt;jboss-web&gt;</FONT>
+
+   <FONT class=comment>&lt;!-- Resource references --&gt;</FONT>
+   <FONT class=preproc>&lt;resource-ref&gt;</FONT>
+      <FONT class=preproc>&lt;res-ref-<FONT class=keytype>name</FONT>&gt;</FONT>jdbc/TechSupDB<FONT class=preproc>&lt;/res-ref-<FONT class=keytype>name</FONT>&gt;</FONT>
+      <FONT class=preproc>&lt;jndi-<FONT class=keytype>name</FONT>&gt;</FONT>java:/TechSupDS<FONT class=preproc>&lt;/jndi-<FONT class=keytype>name</FONT>&gt;</FONT>
+   <FONT class=preproc>&lt;/resource-ref&gt;</FONT>
+
+<FONT class=preproc>&lt;/jboss-web&gt;</FONT>
+<FONT class=preproc>&lt;font CLASS=preproc&gt;</FONT>&amp;lt;/jboss-web&amp;gt;<FONT class=preproc>&lt;/font&gt;</FONT>
+</PRE></DIV><!--
+<ul>
+  <li>As tags XDoclet necessárias são as mesmas que já foram inseridas anteriormente.</li>
+</ul>
+
+<pre class="clsCode">
+C:\...\techsupjsp&gt;ant web-deployment-descriptor
+Buildfile: build.xml
+
+init:
+
+web-deployment-descriptor:
+    [webdoclet] (XDocletMain.start 47) 
+       Executando &lt;deploymentdescriptor/&gt;
+    [webdoclet] Gerando web.xml.
+    [webdoclet] (XDocletMain.start 47) 
+	   Executando &lt;jbosswebxml/&gt;
+    [webdoclet] (TemplateSubTask.engineStarted 794) 
+	   Gerando arquivo 'jboss-web.xml' usando o template 'jar:file: ... /jboss_web_xml.xdt'.
+
+BUILD SUCCESSFUL
+Total time: 13 seconds
+</pre>
+-->
+<H3>4. Empacotar a aplicação em um módulo instalável (<I>deployable</I>)</H3>
+<UL>
+  <LI>Para a geração do módulo WEB (arquivo WAR), vamos executar a tarefa ANT 
+  correspondente: </LI></UL><PRE class=clsCode>C:\...\techsupjsp&gt;ant war
+Buildfile: build.xml
+
+war:
+    [mkdir] Created dir: C:\...\techsupjsp\dist
+      [war] Building war: C:\...\techsupjsp\dist\techsupjsp.war
+
+BUILD SUCCESSFUL
+Total time: 10 seconds
+</PRE>
+<UL>
+  <LI>Para a geração do arquivo EAR, vamos executar a tarefa ANT correspondente: 
+  </LI></UL><PRE class=clsCode>C:\...\techsupjsp&gt;ant ear
+Buildfile: build.xml
+
+ear:
+      [ear] Building war: C:\...\techsup\build\techsupjsp.ear
+
+BUILD SUCCESSFUL
+Total time: 2 seconds
+</PRE>
+<H3>5. Efetuar a instalação (<I>deployment</I>) da aplicação no Container 
+WEB</H3>
+<UL>
+  <LI>No servidor de banco de dados: 
+  <UL>
+    <LI>Vamos usar o mesmo banco de dados (techsup) já criado anteriormente no 
+    MySQL </LI></UL></LI></UL>
+<UL>
+  <LI>Na máquina de <I>deployment</I> (servidor J2EE do cliente final): 
+  <UL>
+    <LI>Podemos usar o mesmo recurso de DataSource já configurado anteriormente: 
+    </LI></UL></LI></UL><PRE class=clsCode>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;!-- $Id: mysql-ds.xml,v 1.1.2.1 2003/12/12 19:19:56 starksm Exp $ --&gt;
+&lt;!--  Datasource config for MySQL using 3.0.9 available from:
+http://www.mysql.com/downloads/api-jdbc-stable.html
+--&gt;
+
+&lt;datasources&gt;
+  &lt;local-tx-datasource&gt;
+    &lt;jndi-name&gt;TechSupDS&lt;/jndi-name&gt;
+    &lt;connection-url&gt;jdbc:mysql://localhost:3306/techsup&lt;/connection-url&gt;
+    &lt;driver-class&gt;com.mysql.jdbc.Driver&lt;/driver-class&gt;
+    &lt;user-name&gt;root&lt;/user-name&gt;
+    &lt;password&gt;&lt;/password&gt;
+  &lt;/local-tx-datasource&gt;
+
+&lt;/datasources&gt;
+</PRE>
+<UL>
+  <LI>Lembre-se do driver JDBC correspondente ao servidor de banco de dados 
+  utilizado. Ele deve estar na pasta <B>jboss-3.2.6\server\default\lib</B>. 
+</LI></UL>
+<UL>
+  <LI>Agora, o servidor JBoss pode entrar no ar: </LI></UL><PRE class=clsCode>C:\...\jboss-3.2.6\bin&gt;run
+</PRE>
+<UL>
+  <LI>Como estamos considerando a máquina de desenvolvimento como sendo a 
+  máquina de <I>deployment</I>: </LI></UL><PRE class=clsCode>C:\...\techsupjsp&gt;ant deploy
+Buildfile: build.xml
+
+deploy:
+     [copy] Copying 1 file to C:\...\jboss-3.2.6\server\default\deploy
+
+BUILD SUCCESSFUL
+Total time: 16 seconds
+</PRE>
+<UL>
+  <LI>Ao copiar o arquivo EAR da aplicação para o JBoss, esse efetua o 
+  <I>deploy</I> da mesma automaticamente.
+  <UL>
+    <LI>Todo o log gerado pelo JBoss é armazenado no arquivo <B>server.log</B>. 
+    <LI>Se todas as configurações estiverem corretas, você verá a mensagem 
+    abaixo no log do JBoss: </LI></UL></LI></UL><PRE class=clsCode>INFO  [STDOUT] Colocando TechSupDB no ServletContext...
+</PRE>
+<H3>6. Acessar a URL que referencia a aplicação WEB</H3>
+<UL>
+  <LI>Execute a aplicação:
+  <UL>
+    <LI><A 
+    href="http://anjinho.dsc.ufpb.br:8080/techsup">http://anjinho.dsc.ufpb.br:8080/techsup</A> 
+    </LI></UL>
+  <LI>Experimente em casa causando erros nos servlets 
+  <UL>
+    <LI>Por exemplo, desconecte o banco de dados </LI></UL></LI></UL>
+<P class=botref>techsupport <A 
+href="http://www.ucb.br/prg/professores/giovanni/disciplinas/2004-1/talp/material/jacques/html/j2ee-2.htm">programa</A> 
+</P></BODY></HTML>

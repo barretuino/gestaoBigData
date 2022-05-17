@@ -1,0 +1,440 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0057)http://www.eas.asu.edu/~cse494db/IonJDBC/JDBCExample.html -->
+<HTML xmlns="http://www.w3.org/TR/REC-html40" xmlns:v = 
+"urn:schemas-microsoft-com:vml" xmlns:o = 
+"urn:schemas-microsoft-com:office:office" xmlns:w = 
+"urn:schemas-microsoft-com:office:word"><HEAD><TITLE>JDBC Example</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+<META content=Word.Document name=ProgId>
+<META content="MSHTML 6.00.2900.3395" name=GENERATOR>
+<META content="Microsoft Word 9" name=Originator><LINK 
+href="./JDBCExample_files/filelist.xml" rel=File-List><LINK 
+href="./JDBCExample_files/editdata.mso" rel=Edit-Time-Data><!--[if !mso]>
+<STYLE>v\:* {
+	BEHAVIOR: url(#default#VML)
+}
+o\:* {
+	BEHAVIOR: url(#default#VML)
+}
+w\:* {
+	BEHAVIOR: url(#default#VML)
+}
+.shape {
+	BEHAVIOR: url(#default#VML)
+}
+</STYLE>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>yangxiao</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>yangxiao</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>14</o:TotalTime>
+  <o:Created>2002-07-25T06:06:00Z</o:Created>
+  <o:LastSaved>2002-07-25T06:22:00Z</o:LastSaved>
+  <o:Pages>10</o:Pages>
+  <o:Words>2197</o:Words>
+  <o:Characters>12527</o:Characters>
+  <o:Company>Arizona State University</o:Company>
+  <o:Lines>104</o:Lines>
+  <o:Paragraphs>25</o:Paragraphs>
+  <o:CharactersWithSpaces>15384</o:CharactersWithSpaces>
+  <o:Version>9.4402</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]-->
+<STYLE>@page Section1 {size: 8.5in 11.0in; margin: 1.0in 1.25in 1.0in 1.25in; mso-header-margin: .5in; mso-footer-margin: .5in; mso-paper-source: 0; }
+A:hover {
+	COLOR: #ff3300; TEXT-DECORATION: underline
+}
+P.MsoNormal {
+	FONT-SIZE: 12pt; MARGIN: 0in 0in 0pt; FONT-FAMILY: "Times New Roman"; mso-style-parent: ""; mso-pagination: widow-orphan; mso-fareast-font-family: "Times New Roman"
+}
+LI.MsoNormal {
+	FONT-SIZE: 12pt; MARGIN: 0in 0in 0pt; FONT-FAMILY: "Times New Roman"; mso-style-parent: ""; mso-pagination: widow-orphan; mso-fareast-font-family: "Times New Roman"
+}
+DIV.MsoNormal {
+	FONT-SIZE: 12pt; MARGIN: 0in 0in 0pt; FONT-FAMILY: "Times New Roman"; mso-style-parent: ""; mso-pagination: widow-orphan; mso-fareast-font-family: "Times New Roman"
+}
+P {
+	FONT-SIZE: 12pt; FONT-FAMILY: "Times New Roman"; mso-fareast-font-family: "Times New Roman"
+}
+CODE {
+	mso-fareast-font-family: "Courier New"; mso-ascii-font-family: "Courier New"; mso-hansi-font-family: "Courier New"; mso-bidi-font-family: "Courier New"
+}
+PRE {
+	FONT-SIZE: 10pt; MARGIN: 0in 0in 0pt; FONT-FAMILY: "Courier New"; mso-fareast-font-family: "Courier New"
+}
+DIV.Section1 {
+	page: Section1
+}
+</STYLE>
+<!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="1027"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]--></HEAD>
+<BODY lang=EN-US style="tab-interval: .5in" vLink=blue link=blue bgColor=white>
+<DIV class=Section1>
+<H1><A name=Introduction></A>Introduction</H1>
+<P>The purpose of this application is to introduce the concept of Java Database 
+Connectivity (JDBC) and illustrate the use of JDBC as a tool for database 
+access. JDBC is a mechanism that allows Java to communicate with databases using 
+a standard Application Programming Interface (API) to access databases 
+regardless of the driver and the database product. This servlet-based 
+application provides the capability to connect to any relational database 
+registered as an ODBC data source using JDBC to browse the database meta-data 
+and instance, and to manipulate the database by issuing ad hoc SQL statements. 
+The application can be run using a browser (Netscape 4.0 or Internet Explorer 
+4.0 or higher). </P>
+<P>The example JDBC application uses a three-tier architecture to access a 
+registered ODBC data source. A Java Servlet and a Java Bean act as the middle 
+tier, communicating with the underlying data source using JDBC (through a 
+JDBC-ODBC driver) and returning the results, using Java Server Pages (JSP), 
+formatted in HTML to the browser. </P>
+<P style="TEXT-ALIGN: center" align=center><IMG id=_x0000_i1025 height=350 
+src="JDBC Example_arquivos/3tier.jpg" width=450 align=bottom border=1></P>
+<DIV class=MsoNormal style="TEXT-ALIGN: center" align=center>
+<HR align=center width="100%" SIZE=2>
+</DIV>
+<H1><A name="Registering an ODBC data source"></A>Registering an ODBC data 
+source</H1>
+<P>To configure the ODBC data source implement the following steps: </P>
+<P>1. Open the control panel from Windows settings and start the application 
+"ODBC Data Sources [32bit]" </P>
+<P>NOTE: In Windows 2000, the Control Panel does not contain the pointer to the 
+"ODBC Data Sources". Using Help, search on ODBC and then select the topic "Using 
+Data Sources". From there, select "Data Sources" to bring up the ODBC Data 
+Source Administrator window.</P>
+<P style="TEXT-ALIGN: center" align=center><IMG id=_x0000_i1027 height=350 
+src="JDBC Example_arquivos/odbcstep1.jpg" width=450 align=bottom border=1></P>
+<P>2. Select the Add button to add a new data source. </P>
+<P style="TEXT-ALIGN: center" align=center><IMG id=_x0000_i1028 height=350 
+src="JDBC Example_arquivos/odbcstep2.jpg" width=450 align=bottom border=1></P>
+<P>3. Select the appropriate driver for your database and click the Finish 
+button.</P>
+<P style="TEXT-ALIGN: center" align=center><IMG id=_x0000_i1029 height=350 
+src="JDBC Example_arquivos/odbcstep3.jpg" width=450 align=bottom border=1></P>
+<P>4. Enter a string in the Data Source Name that you want to use to register 
+your database, and click the Database Select button. </P>
+<P>5. Browse to find the actual file of your database and click OK when you're 
+done. </P>
+<P>6. Click OK to exit all the windows. </P>
+<DIV class=MsoNormal style="TEXT-ALIGN: center" align=center>
+<HR align=center width="100%" SIZE=2>
+</DIV>
+<H1><A name="Installing and Running the application locally"></A>Installing and 
+Running the application locally</H1>
+<P>The application is written in Java so the first requirement is a working Java 
+Developer Kit (JDK). Make sure that you also have a Servlet and JSP container 
+that implements version 2.2 of the servlet specification and version 1.1 of the 
+JSP specification such as Tomcat 3.2 or higher which can be downloaded for free 
+(See <A 
+href="http://www.eas.asu.edu/~cse494db/IonJDBC/JDBCExample.html#Related Links">Related 
+Links</A> section below).</P>
+<P>(Note: Tomcat3.2 and JDK1.3 are not compatible on WindowsNT 4.0, you can use 
+Tomcat3.2 with JDK1.2 or you could use a higher version of Tomcat in this 
+case.)</P>
+<P>Tomcat 4.1 is the latest stable version. The instructions that follow assume 
+that you are using Tomcat 4.1 </P>
+<P>Download and install Tomcat 4.1 in <B>C:\tomcat</B>. You must first create a 
+batch file that sets the environment variable <B>JAVA_HOME</B> to the current 
+directory of JDK installation. Open your favorite text editor and add a line 
+such as the following: </P><PRE><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><B><I>set JAVA_HOME=C:\jdk1.3\<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>(With no spaces)</I></B></PRE>
+<P class=MsoNormal><BR>depending on the version of the Java Developer Kit and 
+the directory that it is located in. Save this file as a <FILENAME>.bat file. 
+Run the batch file in the command prompt window. Note : If you are working on 
+multiple windows, you will need to run the batch file on each wondow.</P>
+<P>Create a directory <B><I>jspservlets</I></B> and then add a subdirectory to 
+it named <B><I>WEB-INF</I></B>.</P>
+<P>Underneath this <B><I>WEB-INF</I></B> subdirectory, create two more 
+directories, <B><I>classes</I></B> and <B><I>lib</I></B>. Inside the 
+<B><I>classes</I></B> directory create a subdirectory named <B><I>com</I></B> 
+and inside com add a directory <B><I>components</I></B>.</P>
+<P>Next you will need to download the application files (See <A 
+href="http://www.eas.asu.edu/~cse494db/IonJDBC/JDBCExample.html#Code">Code</A> 
+section below) and put them in the correct directories as follows :</P>
+<P><B><I>JSP files : C:\jspservlets\ <BR>Control.java (The servlet) : 
+C:\jspservlets\WEB-INF\classes\ <BR>QueryBean.java (The Java bean) : 
+C:\jspservlets\WEB-INF\classes\ </I></B></P>
+<P>With your favorite editor, open the c:\tomcat\conf\server.xml file and before 
+the comment <CODE><B><I><SPAN 
+style="FONT-SIZE: 10pt; FONT-FAMILY: 'Courier New'">&lt;!-- Tomcat Examples 
+Context -- &gt; </SPAN></I></B></CODE>tag, enter the following: 
+<B><I><o:p></o:p></I></B></P><PRE><CODE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></CODE></PRE><PRE><CODE><B><I><SPAN style="mso-spacerun: yes">&nbsp; </SPAN>&lt;Context path="/jspservlets" docBase="c:\jspservlets" debug="0" reloadable="true" &gt;<o:p></o:p></I></B></CODE></PRE><PRE><CODE><B><I><SPAN style="mso-spacerun: yes">&nbsp; </SPAN>&lt;/Context&gt;<o:p></o:p></I></B></CODE></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE>
+<P>In addition, create a new file <B><I>web.xml</I></B> and enter the following: 
+<B><I><o:p></o:p></I></B></P><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp; </SPAN>&lt;!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.// DTD Web Application 1.2//EN" "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd"&gt;<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp; </SPAN>&lt; web-app &gt;<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp; </SPAN>&lt;/ web-app &gt;<o:p></o:p></I></B></PRE>
+<P class=MsoNormal>Save the file in <B><I>c:\jspservlets\WEB-INF\ 
+</I></B>directory. </P>
+<P>Before you run the application you need to compile the java files 
+(Control.java, QueryBean.java)<BR>You need to set the path and classpath prior 
+to that:<BR><BR><B><I>set path=c:\jdk1.3\bin\;%path% <BR>set 
+classpath=.;c:\jspservlets;c:\tomcat\lib\servlet.jar;c:\jdk1.3\lib\tools.jar;%classpath%<BR></I></B><BR>(Note: 
+servlet.jar can be downloaded from <A 
+href="http://java.sun.com/products/servlet/download.html">http://java.sun.com/products/servlet/download.html</A>)</P>
+<P>You must compile the files into their directories. <BR>From the directory 
+that has the *.java files, type <B>javac -d . *.java </B>in the command prompt. 
+This will compile the files and put the class files in the correct directory 
+according to their respective package statements. </P>
+<P>You also need to start the server. Open a dos window, change directory to 
+<B><I>c:\tomcat\bin\</I></B> and type <B><I>startup</I></B> to do that. </P>
+<P>Finally open your browser and access the application using the following URL: 
+<A 
+href="http://localhost:8080/jspservlets/MainPage.jsp">http://localhost:8080/jspservlets/MainPage.jsp</A></P>
+<P>When you are finished working with the application, type 
+<B><I>shutdown</I></B> within <B><I>c:\tomcat\bin\</I></B> to stop the 
+server.</P>
+<DIV class=MsoNormal style="TEXT-ALIGN: center" align=center>
+<HR align=center width="100%" SIZE=2>
+</DIV>
+<H1><A name="Opening a Database"></A>Opening a Database</H1>
+<P>When the application is running your browser should be at the following 
+screen. </P>
+<P style="TEXT-ALIGN: center" align=center><IMG id=_x0000_i1032 height=450 
+src="JDBC Example_arquivos/mainpage.jpg" width=700 align=bottom border=0></P>
+<P style="MARGIN-BOTTOM: 12pt">Enter the registered name of the ODBC data source 
+and press submit. The application will establish a connection to the database 
+using the given data source name. The following lines of code demonstrate how a 
+connection can be established.<B><I><o:p></o:p></I></B></P><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;</SPAN><o:p></o:p></I></B></PRE><PRE><B><I>String url = "jdbc:odbc:" + dbName;<o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I>try<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>{<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>/* Load the jdbc-odbc driver */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>/* Open a connection to the odbc data source entered by the user */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>con =DriverManager.getConnection(url,"","");<SPAN style="mso-spacerun: yes">&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;</SPAN>}<o:p></o:p></I></B></PRE>
+<P class=MsoNormal><BR>In the above code <B><I>dbName</I></B> is the data source 
+name entered. If the data source name cannot be found an exception is caught and 
+the following screen is displayed. </P>
+<P style="TEXT-ALIGN: center" align=center><IMG id=_x0000_i1033 height=450 
+src="JDBC Example_arquivos/errorpage.jpg" width=700 align=bottom border=0></P>
+<P style="MARGIN-BOTTOM: 12pt">The following code catches the exception thrown 
+by the above <B><I>try</I></B> when an error is encountered while establishing a 
+connection to the data source. The control is transfered to a JSP error 
+page<B><I><o:p></o:p></I></B></P><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I>catch (Exception e)<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>{<SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>// if there is an error with the database source, close the connection<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>// and transfer control to an error page.<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>con = null;<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>dispatcher = context.getRequestDispatcher("/errorDbSourse.jsp");<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>dispatcher.forward(req, res);<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>}<o:p></o:p></I></B></PRE>
+<DIV class=MsoNormal style="TEXT-ALIGN: center" align=center>
+<HR align=center width="100%" SIZE=2>
+</DIV>
+<H1><A name="Database MetaData"></A>Database MetaData</H1>
+<P>After the connection to the database has been established, two browser 
+windows are opened: a Database Manipulation window and a Database Metadata 
+window. The database MetaData is used to browse the database metadata and the 
+current database instance. </P>
+<P style="TEXT-ALIGN: center" align=center><IMG id=_x0000_i1035 height=450 
+src="JDBC Example_arquivos/metadatapage.jpg" width=700 align=bottom 
+border=0></P>
+<P style="MARGIN-BOTTOM: 12pt">The Database MetaData window consists of two 
+frames. The top frame displays the table names and their attributes from the 
+currently opened database. When a table name is selected, the bottom frame 
+displays the selected table's instance, showing the attribute names and types in 
+the header. The following code shows how the application retrieves the database 
+meta-data (See <A 
+href="http://www.eas.asu.edu/~cse494db/IonJDBC/MetaTables.txt">MetaTables.jsp 
+</A>and <A 
+href="http://www.eas.asu.edu/~cse494db/IonJDBC/Control.java">Control.java </A>). 
+<B><I><o:p></o:p></I></B></P><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I> <o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;</SPAN>/* Holds the Meta-Data */<o:p></o:p></I></B></PRE><PRE><B><I> DatabaseMetaData dbmd;<o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I> /* ResultSet objects to hold the database table names and database column names */<o:p></o:p></I></B></PRE><PRE><B><I> ResultSet rsTables = null;<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;</SPAN>ResultSet rsColumns = null; <SPAN style="mso-tab-count: 3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;</SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;</SPAN>/* Retrieve meta-data from the database through the connection established*/<o:p></o:p></I></B></PRE><PRE><B><I> dbmd = con.getMetaData(); <o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I> /* Get the table names in the ResultSet object using the <o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) <o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>method matching the catalog, schema, table name and type criteria specified. <o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>In this case all the tables are returned */<o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I> rsTables = dbmd.getTables(null, null, null, null); <o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I>/* Iterate through the ResultSet object and store the tables and columns in the QueryBean */<o:p></o:p></I></B></PRE><PRE><B><I>while (rsTables.next())<o:p></o:p></I></B></PRE><PRE><B><I>{<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>tableName = rsTables.getString("TABLE_NAME");<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>ttype=rsTables.getString("TABLE_TYPE");<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 3">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* checks if it's a user-defined table*/<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>if (ttype.equals("TABLE"))<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>{<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>/* store the table name in a StringBuffer Object */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>...<o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>/* Get the column names in the ResultSet */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>rsColumns = dbmd.getColumns(null,null,tableName,null);<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>while (rsColumns.next())<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>{<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>/* store the attribute names in the StringBubber Object */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>...<SPAN style="mso-tab-count: 1"> </SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>}<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>/* Store the StringBuffer Object in the bean as a String */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>...<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>}<o:p></o:p></I></B></PRE><PRE><B><I>}<o:p></o:p></I></B></PRE><PRE><B><I>/* transfer control to the appropriate JSP page */<o:p></o:p></I></B></PRE><PRE><B><I>...<o:p></o:p></I></B></PRE>
+<DIV class=MsoNormal style="TEXT-ALIGN: center" align=center>
+<HR align=center width="100%" SIZE=2>
+</DIV>
+<H1><A name="Database Manipulation"></A>Database Manipulation</H1>
+<P>The Database Manipulation window allows the user to query the database and to 
+manipulate the data stored in the database including insertions, updates, and 
+deletions. The submit button executes the SQL statement entered in the text 
+window, displaying the result of the statement execution in the bottom frame. 
+The Clear button clears the text window. The Open MetaData button opens the 
+Database MetaData window if the one opened by default was inadvertently closed. 
+The Close Database button closes the current database, returning the application 
+to its main page.</P>
+<P>The user can enter any valid SQL statement in the text window. In particular 
+the user can enter any type of SELECT, INSERT, UPDATE, or DELETE statement. Any 
+other type of statement will not be processed and the application will respond 
+with an error message. </P>
+<P style="TEXT-ALIGN: center" align=center><IMG id=_x0000_i1037 height=450 
+src="JDBC Example_arquivos/datamanippage.jpg" width=700 align=bottom 
+border=0></P>
+<H1><A name=Query></A>Query</H1>
+<P class=MsoNormal>If a SELECT statement is entered in the text window, the 
+application, through JDBC and the java.sql class, will execute the statement, 
+and get the results, if any, in a ResultSet object. The data stored in the 
+ResultSet can be retrieved by iterating through the ResultSet object. The 
+following window shows the query <B><I>select * from project</I></B> from the 
+company database and the results. </P>
+<P style="TEXT-ALIGN: center" align=center><IMG id=_x0000_i1038 height=450 
+src="JDBC Example_arquivos/querypage.jpg" width=700 align=bottom border=0></P>
+<P style="MARGIN-BOTTOM: 12pt">The following code shows how to perform a query 
+on the database (See <A 
+href="http://www.eas.asu.edu/~cse494db/IonJDBC/QueryOutputProcess.txt">QueryOutputProcess.jsp</A>, 
+<A 
+href="http://www.eas.asu.edu/~cse494db/IonJDBC/QueryOutputProcessUpdate.txt">QueryOutputProcessUpdate.jsp</A>, 
+and <A 
+href="http://www.eas.asu.edu/~cse494db/IonJDBC/Control.java">Control.java</A>).<B><I><o:p></o:p></I></B></P><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I>try<o:p></o:p></I></B></PRE><PRE><B><I>{<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* Initializes<SPAN style="mso-spacerun: yes">&nbsp; </SPAN>a statement object to the connection*/<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>Statement stmt = con.createStatement();<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* ResultSet object to hold the result of the query */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>ResultSet rs = null;<SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>/* Get the query entered by the user as a string using the request object */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>String query = req.getParameter("query"); <o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>...<o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* execute the sql statement and put the results in the ResultSet object*/<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>rs = stmt.executeQuery(query);<o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* Holds the Meta-Data */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>ResultSetMetaData rsmd = rs.getMetaData();<o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* Get the number of columns */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>int numCols = rsmd.getColumnCount (); <o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* Store numCols in the QueryBean */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>qBean.setNumColumns(numCols);<o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>for ( int i = 1; i &lt;= numCols; i++)<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>{<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>/* Store the column names and their types in the QueryBean using<SPAN style="mso-spacerun: yes">&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>rsmd.getColumnLabel(i) and rsmd.getColumnTypeName(i)*/<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>...<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>}<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>while(rs.next())<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>{<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp; </SPAN>/* Iterate through the ResultSet and store the actual data in the QueryBean */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>using rs.getString(i) */<SPAN style="mso-tab-count: 1"> </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>} <o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;</SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>...<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>...<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>/* transfer control to the appropriate jsp page */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>...<o:p></o:p></I></B></PRE><PRE><B><I>}<o:p></o:p></I></B></PRE>
+<H1><A name=Insert/Update/Delete></A>Insert/Update/Delete</H1>
+<P class=MsoNormal>If an INSERT, UPDATE, or DELETE statement is entered in the 
+text window, the application will execute the statement through JDBC and the 
+java.sql. This is managed by the executeUpdate method of a Statement object, in 
+this case the statement entered by the user. If the execution is not successful, 
+an SQL exception is caught and displayed. The following window shows the 
+statement <B><I>insert into dept_locations values ('7', 'Tempe')</I></B> from 
+the company database and the results. </P>
+<P style="TEXT-ALIGN: center" align=center><IMG id=_x0000_i1039 height=450 
+src="JDBC Example_arquivos/inupdelpage.jpg" width=700 align=bottom border=0></P>
+<P style="MARGIN-BOTTOM: 12pt">The following code shows how to perform an 
+insert, update, or delete statement.<B><I><o:p></o:p></I></B></P><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I>try<o:p></o:p></I></B></PRE><PRE><B><I>{<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* usrstmt is the statement entered by the user */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>stmt.executeUpdate(usrstmt); <o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* output appropriate message */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN>...<o:p></o:p></I></B></PRE><PRE><B><I>}<o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE>
+<DIV class=MsoNormal style="TEXT-ALIGN: center" align=center>
+<HR align=center width="100%" SIZE=2>
+</DIV>
+<H1><A name="Closing a Database"></A>Closing a Database</H1>
+<P class=MsoNormal style="MARGIN-BOTTOM: 12pt">To close the current database, 
+the user should close the Database MetaData window and then press the Close 
+Database button in the Database Manipulation window. This will bring up the Main 
+Page of the application where the user can enter another registered ODBC data 
+source name or quit. The following is some of the code needed for closing the 
+database. <B><I><o:p></o:p></I></B></P><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></I></B></PRE><PRE><B><I>finally<o:p></o:p></I></B></PRE><PRE><B><I>{<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>/* close the resultset */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>rs = null; <o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-tab-count: 1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </SPAN><o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp;&nbsp;</SPAN>/* close the connection */<o:p></o:p></I></B></PRE><PRE><B><I><SPAN style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </SPAN>con = null;<o:p></o:p></I></B></PRE><PRE><B><I>}<o:p></o:p></I></B></PRE>
+<DIV class=MsoNormal style="TEXT-ALIGN: center" align=center>
+<HR align=center width="100%" SIZE=2>
+</DIV>
+<H1><A name=Code></A>Code</H1>
+<P class=MsoNormal style="MARGIN-BOTTOM: 12pt"><![if !supportEmptyParas]><![endif]>&nbsp;<o:p></o:p></P>
+<H3>JSP pages NOTE *** Save the .txt files as .jsp when promped.</H3>
+<H3>*** Use the zip file if your browser is IE ***</H3>
+<P class=MsoNormal style="MARGIN-BOTTOM: 12pt"><A 
+href="http://www.eas.asu.edu/~cse494db/IonJDBC/jsppages.zip">jspPages.zip</A> 
+</P>
+<TABLE style="mso-cellspacing: 1.5pt" cellPadding=0 border=1>
+  <TBODY>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal style="TEXT-ALIGN: center" 
+      align=center><B>File<o:p></o:p></B></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal style="TEXT-ALIGN: center" 
+      align=center><B>Description<o:p></o:p></B></P></TD></TR>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><A 
+      href="http://www.eas.asu.edu/~cse494db/IonJDBC/MainPage.txt">MainPage.jsp</A></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal>Main page for application.</P></TD></TR>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><A 
+      href="http://www.eas.asu.edu/~cse494db/IonJDBC/Query.txt">Query.jsp</A></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal>Database Manipulation frame window.</P></TD></TR>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><A 
+      href="http://www.eas.asu.edu/~cse494db/IonJDBC/QueryInput.txt">QueryInput.jsp</A></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal>Top frame of Database Manipulation window.</P></TD></TR>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><A 
+      href="http://www.eas.asu.edu/~cse494db/IonJDBC/QueryOutput.txt">QueryOutput.jsp</A></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal>Bottom frame of Database Manipulation window and 
+      Database MetaData Window.</P></TD></TR>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><A 
+      href="http://www.eas.asu.edu/~cse494db/IonJDBC/MetaData.txt">MetaData.jsp</A></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal>Database MetaData frame window.</P></TD></TR>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><A 
+      href="http://www.eas.asu.edu/~cse494db/IonJDBC/MetaTables.txt">MetaTables.jsp</A></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal>Top frame of Database MetaData window.</P></TD></TR>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><A 
+      href="http://www.eas.asu.edu/~cse494db/IonJDBC/errorDbSource.txt">errorDbSource.jsp</A></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal>Displays error message for incorrect ODBC data 
+      source.</P></TD></TR>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><A 
+      href="http://www.eas.asu.edu/~cse494db/IonJDBC/errorException.txt">errorException.jsp</A></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal>Displays SQL exception message.</P></TD></TR>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><A 
+      href="http://www.eas.asu.edu/~cse494db/IonJDBC/errorQuery.txt">errorQuery.jsp</A></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal>Displays error message for empty or bad user 
+    input.</P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="MARGIN-BOTTOM: 12pt"><![if !supportEmptyParas]><![endif]>&nbsp;<o:p></o:p></P>
+<H3>Servlet </H3>
+<TABLE style="mso-cellspacing: 1.5pt" cellPadding=0 border=1>
+  <TBODY>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal style="TEXT-ALIGN: center" 
+      align=center><B>File<o:p></o:p></B></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal style="TEXT-ALIGN: center" 
+      align=center><B>Description<o:p></o:p></B></P></TD></TR>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><A 
+      href="http://www.eas.asu.edu/~cse494db/IonJDBC/Control.java">Control.java</A></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal>A servlet for computing results and transferring 
+      control among the pages.</P></TD></TR></TBODY></TABLE>
+<P class=MsoNormal style="MARGIN-BOTTOM: 12pt"><![if !supportEmptyParas]><![endif]>&nbsp;<o:p></o:p></P>
+<H3>Java Bean </H3>
+<TABLE style="mso-cellspacing: 1.5pt" cellPadding=0 border=1>
+  <TBODY>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal style="TEXT-ALIGN: center" 
+      align=center><B>File<o:p></o:p></B></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal style="TEXT-ALIGN: center" 
+      align=center><B>Description<o:p></o:p></B></P></TD></TR>
+  <TR>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal><A 
+      href="http://www.eas.asu.edu/~cse494db/IonJDBC/QueryBean.java">QueryBean.java</A></P></TD>
+    <TD 
+    style="PADDING-RIGHT: 0.75pt; PADDING-LEFT: 0.75pt; PADDING-BOTTOM: 0.75pt; PADDING-TOP: 0.75pt">
+      <P class=MsoNormal>A Java Bean Object for storring information from the 
+      database to the JSP pages</P></TD></TR></TBODY></TABLE>
+<DIV class=MsoNormal style="TEXT-ALIGN: center" align=center>
+<HR align=center width="100%" SIZE=2>
+</DIV>
+<H1><A name="Related Links"></A>Related Links</H1>
+<P class=MsoNormal>JDBC API documentation, java.sun.com<BR><A 
+href="http://java.sun.com/products/jdk/1.3/docs/guide/jdbc/getstart/GettingStartedTOC.fm.html">http://java.sun.com/products/jdk/1.3/docs/guide/jdbc/getstart/GettingStartedTOC.fm.html</A> 
+<BR><BR>The Java Tutorial: Overview of Servlets <BR><A 
+href="http://web2.java.sun.com/docs/books/tutorial/servlets/overview/index.html">http://web2.java.sun.com/docs/books/tutorial/servlets/overview/index.html</A> 
+<BR><BR>The Java Developer Kit 1.2.2<BR><A 
+href="http://java.sun.com/products/jdk/1.2/index.html">http://java.sun.com/products/jdk/1.2/index.html</A> 
+<BR><BR>Tomcat. A Reference Implementation for the Java Servlet 2.2 and 
+<BR>JavaServer Pages 1.1 Technologies.<BR><A 
+href="http://jakarta.apache.org/tomcat/">http://jakarta.apache.org/tomcat/</A><BR><BR>The 
+Sun's Java Server Pages Tutorial.<BR><A 
+href="http://www.java.sun.com/products/jsp/html/jsptut.html">http://www.java.sun.com/products/jsp/html/jsptut.html</A></P></DIV></BODY></HTML>

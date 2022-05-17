@@ -1,0 +1,48 @@
+DIV.webcpp {
+	BACKGROUND-COLOR: #f9f9f9
+}
+.webcpp A:link {
+	COLOR: #00b800
+}
+.webcpp A:visited {
+	COLOR: #666666
+}
+.webcpp A:active {
+	COLOR: #224fff
+}
+.webcpp A:hover {
+	COLOR: #a900a9
+}
+.webcpp PRE {
+	COLOR: #000000
+}
+.webcpp FONT {
+	FONT-SIZE: 100%
+}
+.webcpp .symbols {
+	COLOR: #0077dd
+}
+.webcpp .preproc {
+	COLOR: #a900a9
+}
+.webcpp .integer {
+	COLOR: #ff0032
+}
+.webcpp .floatpt {
+	COLOR: #ff23a6
+}
+.webcpp .dblquot {
+	COLOR: #00b800
+}
+.webcpp .sinquot {
+	COLOR: #00b86b
+}
+.webcpp .keyword {
+	FONT-WEIGHT: bold; COLOR: #224fff
+}
+.webcpp .keytype {
+	FONT-WEIGHT: bold; COLOR: #ff9933
+}
+.webcpp .comment {
+	COLOR: #666666; FONT-STYLE: italic
+}
